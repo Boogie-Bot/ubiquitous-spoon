@@ -1,0 +1,112 @@
+package org.example.vehicles;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+public class HelloController{
+
+    @FXML
+    private Label citympg;
+
+    @FXML
+    private Label hwympg;
+
+    @FXML
+    private ComboBox<String> yearCombo;
+
+    @FXML
+    private ComboBox<String> makeCombo;
+
+    @FXML
+    private ComboBox<String> modelCombo;
+
+    @FXML
+    private final String dbURL = "jdbc:sqlite:D:\\Database Management\\Vehicle Project\\vehicles.sqlite";
+
+    @FXML
+    private Connection connection;
+
+
+    public void initialize() throws SQLException {
+
+        connection = DriverManager.getConnection(dbURL);
+        System.out.println("Connected...");
+
+        String query = "SELECT DISTINCT year FROM vehicles ORDER BY year";
+
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+
+        ArrayList<String> years = new ArrayList<>();
+        while (rs.next()) {
+            years.add(rs.getString("year"));
+        }
+        yearCombo.getItems().setAll(years);
+    }
+
+    @FXML
+    protected void onYearChange() throws SQLException {
+        System.out.println(yearCombo.getValue());
+
+        connection = DriverManager.getConnection(dbURL);
+
+        String query = "SELECT DISTINCT make FROM vehicles WHERE year = " + yearCombo.getValue() + " ORDER BY make";
+
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+
+        ArrayList<String> makes = new ArrayList<>();
+
+        while (rs.next()) {
+            makes.add(rs.getString("make"));
+        }
+        makeCombo.getItems().setAll(makes);
+    }
+    @FXML
+    protected void onMakeChange() throws SQLException {
+        System.out.println(makeCombo.getValue());
+
+        connection = DriverManager.getConnection(dbURL);
+
+        String query = "SELECT DISTINCT model FROM vehicles WHERE year = '" + yearCombo.getValue() + "' AND make = '" + makeCombo.getValue() + "' ORDER BY model";
+
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+
+        ArrayList<String> models = new ArrayList<>();
+
+        while (rs.next()) {
+            models.add(rs.getString("model"));
+        }
+        modelCombo.getItems().setAll(models);
+    }
+    @FXML
+    protected void onModelChange() throws SQLException {
+
+        String selYear = yearCombo.getValue();
+        String selMake = makeCombo.getValue();
+        String selModel = modelCombo.getValue();
+
+        connection = DriverManager.getConnection(dbURL);
+
+        String cityQuery = "SELECT AVG(UCity) FROM vehicles WHERE year = '" + selYear + "' AND make = '" + selMake + "' AND model = '" + selModel + "'";
+        String hwyQuery = "SELECT AVG(UHighway) FROM vehicles WHERE year = '" + selYear + "' AND make = '" + selMake + "' AND model = '" + selModel + "'";
+
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(cityQuery);
+        ResultSet resSet = stmt.executeQuery(hwyQuery);
+
+        if (rs.next()){
+            int cMPG = rs.getInt("avg_city");
+            citympg.setText(String.valueOf(cMPG));
+        }
+        if(resSet.next()){
+            int hwyMPG = resSet.getInt("avg_hwy");
+            hwympg.setText(String.valueOf(hwyMPG));
+        }
+    }
+    }

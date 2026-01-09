@@ -136,3 +136,34 @@ public class HelloController{
         }
     }
     }
+
+## hello-view.fxml code
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.vehicles.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label fx:id="year" text="Year" />
+   <ComboBox fx:id="yearCombo" onAction="#onYearChange" prefWidth="150.0">
+
+   </ComboBox>
+
+    <Label fx:id="make" text="Make" />
+   <ComboBox fx:id="makeCombo" onAction="#onMakeChange" prefWidth="150.0">
+
+   </ComboBox>
+
+    <Label fx:id="model" text="Model" />
+   <ComboBox fx:id="modelCombo" onAction="#onModelChange" prefWidth="150.0">
+
+   </ComboBox>
+
+    <Label fx:id="citympg" text="City:" />
+    <Label fx:id="hwympg" text="Highway:" />
+</VBox>

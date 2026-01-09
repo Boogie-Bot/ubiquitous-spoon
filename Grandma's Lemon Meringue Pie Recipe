@@ -1,0 +1,52 @@
+## HTML for recipe website
+file:///C:/Users/caleb/OneDrive/Internet%20Dev/HTML%20and%20CSS%20Recipe/pie.html
+
+## CSS for recipe website
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+body{
+    background-color: white;
+    color: #404040;
+    font-size: 11pt;
+    font-family: Libre+Bakersville;
+}
+h1{
+    text-align: left;
+    font-size: 18pt;
+    color: #A4A400;
+    background-color: #F0F0F0;
+    font-style:  Lucida Sans Unicode, Helvetica, Arial;
+    text-decoration: underline;
+}
+#heading{
+    text-align: center;
+    margin-left: 33%;
+    font-size: 22pt;
+}
+h1,#heading{
+    display: inline-block;
+}
+link{
+    color: #A4A400;
+}
+div .quote{
+    background-color: #FFFFA8;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.copyright{
+    margin-left: 0%;
+}
+.Production{
+    margin-left: 2.1%;
+}
+.reserved{
+    margin-left: 5.5%;
+}
+.copyright, .Production, .reserved{
+    color: gray;
+}
+links a{
+    color:#A4A400;
+}

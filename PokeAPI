@@ -1,0 +1,164 @@
+## index.css code
+body {
+    font-family: sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 50px;
+}
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 200px;
+    }
+
+    .card {
+      background: blue;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      width: 300px;
+      height: 450px;
+      margin: 30px auto;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .card header{
+        display: flex;
+        justify-content: space-between;
+        color: red;
+    }
+    .card h2{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: red;
+        font-size: 20px;
+    }
+    .card img {
+      width: 110px;
+    }
+    
+    #searchBtn{
+      background-color: red;
+      color: white;
+      width: 100px;
+      height: 25px;
+
+    }
+## index.html code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <title>Pokemon Deck</title>
+</head>
+<body>
+    <div class = "search">
+    <input placeholder ="Type a number 1-150" id = "number"/>
+    <button id = "searchBtn">Search</button>
+    </div>
+    <!-- This is the creation of where each element will go on the pokemon card including the image, name, attack, defense, and speed. -->
+    <div class="card">
+        <header>
+            <p id = "hp"> </p> 
+        </header>
+        <div class = "pokeImage">
+        <img src="pokeBall.jpg" alt="pokemon_image" >
+        </div>
+        <h2>
+            <p id = "name"></p>
+            
+            <p id = "attack"></p>
+        
+            <p id = "defense"></p>
+        
+            <p id = "speed"></p>
+        </h2>
+    </div>
+    
+</body>
+</html>
+## index.js code
+(function() {
+"use strict";
+window.addEventListener('load', init);
+
+function init() { 
+    //Event with search button       
+    const searchButton = id('searchBtn');
+    searchButton.addEventListener('click', getPokemon);
+}
+    
+    function getPokemon(response) {
+        //First end point of my api
+        const url = `https://pokeapi.co/api/v2/pokemon/`;
+        const pokemonNumber = id('number');
+
+        //Second endpoint of my api includes original with whatever number is typed into the input attached to the end
+        const finalUrl = url + pokemonNumber.value;
+        console.log(finalUrl);
+        //Fetching the url from the api
+        fetch(finalUrl)
+            .then(statusCheck)
+            .then((response) => response.json())
+            .then(generateCard)
+            .catch(handleError);
+    }
+
+    function generateCard(response){
+        console.log(response);
+
+        const img = document.querySelector('.pokeImage img'); // Select the existing image
+        img.src = response.sprites.other.dream_world.front_default;//Changing of image to the selected pokemons image
+
+        const hp = id('hp');
+        hp.textContent = response.stats[0].base_stat + " hp";//Finding the hp of the selected pokemon
+
+        const pokeName = id('name');
+        pokeName.textContent = response.name.toUpperCase();//Finding the name of the selected pokemon
+
+        const attack = id('attack');
+        attack.textContent = "Attack: " + response.stats[1].base_stat;//Finding the attack power of the selected pokemon
+
+        const defense = id('defense');
+        defense.textContent = "Defense: " + response.stats[2].base_stat;//Finding the defense power of the selected pokemon
+
+        const speed = id('speed');
+        speed.textContent = "Speed: " + response.stats[5].base_stat;//Finding the speed of the selected pokemon
+    }
+
+    function handleError(error) {
+        console.log(error);
+    }
+/////////////////////////////////////////////////////////////////////
+    // Helper functions
+    /**
+    * Helper function to return the response's result text if successful, otherwise
+    * returns the rejected Promise result with an error status and corresponding text
+    * @param {object} res - response to check for success/error
+
+    * @return {object} - valid response if response was successful, otherwise rejected
+    *                    Promise result
+    */
+    async function statusCheck(res) {
+        if (!res.ok) {
+            throw new Error(await res.text());
+        }
+        return res;
+    }
+
+    function id(id) {
+        return document.getElementById(id);
+    }
+
+    function qs(selector) {
+        return document.querySelector(selector);
+    }
+
+    function qsa(selector) {
+        return document.querySelectorAll(selector);
+    }
+})();
